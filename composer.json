@@ -1,14 +1,14 @@
 {
-    "name": "laravel/laravel",
+    "name": "keithmifsud/php-event-sourcing-demo",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "A demo application for the Event Sourcing tutorials on keith-mifsud.me",
     "keywords": [
-        "framework",
-        "laravel"
+        "event-sourcing",
+        "demo"
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.1.3",
+        "php": "^7.3",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0"
