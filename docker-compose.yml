@@ -1,0 +1,65 @@
+version: '3'
+services:
+
+  # PHP Runtime Service
+  es_demo_php_runtime:
+    build:
+      context: .
+      dockerfile: ./docker/PHP_Dockerfile
+    image: digitalocean.com/php
+    container_name: es_demo_php_runtime
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: es_demo_php_runtime
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./docker/configuration/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - es-demo-network
+
+  # Nginx Service
+  es_demo_nginx_webserver:
+    image: nginx:alpine
+    container_name: es_demo_nginx_webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "8080:80"
+      - "4430:443"
+    volumes:
+      - ./:/var/www
+      - ./docker/configuration/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - es-demo-network
+
+  # MySQL Service
+  es_demo_mysql_db:
+    image: mysql:5.7.22
+    container_name: es_demo_mysql_db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3315:3306"
+    environment:
+      MYSQL_DATABASE: es_demo_application_db
+      MYSQL_ROOT_PASSWORD: secret
+      SERVICE_TAGS: dev
+      SERVICE_NAME: es_demo_mysql_db
+    volumes:
+      - ./docker/storage/app-data:/var/lib/mysql/
+      - ./docker/configuration/mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - es-demo-network
+
+# Docker Networks
+networks:
+  es-demo-network:
+    driver: bridge
+
+# Volumes
+volumes:
+  app-data:
+    driver: local
