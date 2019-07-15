@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Feature;
+namespace ESDemo\Tests\Feature;
 
-use Tests\TestCase;
+use ESDemo\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ExampleTest extends TestCase
