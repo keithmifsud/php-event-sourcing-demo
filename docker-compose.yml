@@ -73,6 +73,24 @@ services:
     networks:
       - es-demo-network
 
+  es_demo_mongo_read_model_db:
+    image: mongo:3.4.22-xenial
+    container_name: es_demo_mongo_read_model_db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "8081:8081"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: secret
+      SERVICE_NAME: es_demo_mongo_read_model_db
+      SERVICE_TAGS: dev
+    volumes:
+      - ./docker/storage/read-model-data:/data/db
+    networks:
+      - es-demo-network
+
+
 
 # Docker Networks
 networks:
