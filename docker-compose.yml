@@ -100,3 +100,7 @@ networks:
 volumes:
   app-data:
     driver: local
+  event-store-data:
+    driver: local
+  read-model-data:
+    driver: local
