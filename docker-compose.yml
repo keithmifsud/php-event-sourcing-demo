@@ -35,10 +35,10 @@ services:
     networks:
       - es-demo-network
 
-  # MySQL Service
-  es_demo_mysql_db:
+  # MySQL Service for application data
+  es_demo_mysql_app_db:
     image: mysql:5.7.22
-    container_name: es_demo_mysql_db
+    container_name: es_demo_mysql_app_db
     restart: unless-stopped
     tty: true
     ports:
@@ -47,10 +47,47 @@ services:
       MYSQL_DATABASE: es_demo_application_db
       MYSQL_ROOT_PASSWORD: secret
       SERVICE_TAGS: dev
-      SERVICE_NAME: es_demo_mysql_db
+      SERVICE_NAME: es_demo_mysql_app_db
     volumes:
       - ./docker/storage/app-data:/var/lib/mysql/
       - ./docker/configuration/mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - es-demo-network
+
+  # MySQL Service for event store data
+  es_demo_mysql_event_store_db:
+    image: mysql:5.7.22
+    container_name: es_demo_mysql_event_store_db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3316:3306"
+    environment:
+      MYSQL_DATABASE: es_demo_event_store_db
+      MYSQL_ROOT_PASSWORD: secret
+      SERVICE_TAGS: dev
+      SERVICE_NAME: es_demo_mysql_event_store_db
+    volumes:
+      - ./docker/storage/event-store-data:/var/lib/mysql/
+      - ./docker/configuration/mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - es-demo-network
+
+  es_demo_mongo_read_model_db:
+    image: mongo:3.4.22-xenial
+    container_name: es_demo_mongo_read_model_db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "8081:8081"
+    environment:
+      MONGO_INITDB_DATABASE: es_demo_read_model_db
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: secret
+      SERVICE_NAME: es_demo_mongo_read_model_db
+      SERVICE_TAGS: dev
+    volumes:
+      - ./docker/storage/read-model-data:/data/db
     networks:
       - es-demo-network
 
